@@ -62,6 +62,13 @@ def idade_maxima(dic):
             max = int(valor['idade'])
     return max
 
+def array_col(dic):
+    array=[]
+    for key,valor in dic.items():
+        if valor['colesterol'] != 0:
+            array.append(valor['colesterol'])
+    return array
+
 # Função para ver quantas pessoas com idades daquele intervalo com doenca
 def etaria_doenca(min,max,dic):
     contador = 0;
