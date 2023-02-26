@@ -1,6 +1,6 @@
 import sys
     
-def sum_numbers_in_text():
+def programa_tpc2():
     soma_ativada = True  
     total = 0  
     try:
@@ -34,12 +34,9 @@ def menu():
     print("Pronto para começar")   
     
 
-
-
-
 def main():
     menu()
-    sum_numbers_in_text()
+    programa_tpc2()
 
 
 if __name__ == '__main__':
