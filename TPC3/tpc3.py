@@ -5,17 +5,17 @@ from collections import defaultdict
 
 
 # Função responsável por fazer o parse
-def processarFile():
+def parsing():
     with open("processos.txt","r") as file_D:
         linhas = file_D.readlines()
 
         pattern= re.compile(r"^(?P<Pasta>\d+)::(?P<Data>\d{4}\-\d{2}\-\d{2})?::(?P<Nome>[a-zA-Z \,\.\(\)]+)?::(?P<Pai>[a-zA-Z \,\.\(\)]+)?::(?P<Mae>[a-zA-Z \,\.\(\)]+)?::(?P<Observacoes>(\s*.*\s*)*)?::$")
-        processedLinhas = []
+        linhas_processadas = []
         for linha in linhas:
             match_result = pattern.match(linha)
             if match_result:
-                processedLinhas.append(match_result.groupdict())
-    return processedLinhas
+                linhas_processadas.append(match_result.groupdict())
+    return linhas_processadas
 
 
 # Função para alínea A ----------------------------------------------
@@ -76,7 +76,7 @@ def converter_to_json():
     with open("processos.json", "w") as file:
         json.dump(registros, file, indent=4)
 
-def processaNomes(lista):
+def nomes_freq(lista):
     dic = {}
     patternAno = re.compile(r"(\d{4})")
     patternNome = re.compile(r"[a-zA-Z]+")
@@ -108,7 +108,7 @@ def processaNomes(lista):
 
 def relacoes_freq(parsed):
     dic = defaultdict(int)
-    pattern = re.compile(r",((?:Pai|Filho|Irmao|Avo|Neto|Tio|Sobrinho|Mae|Primo])s?\b\s*[^.\d\(\)]*).")
+    pattern = re.compile(r",((?:Pai|Filho|Irmao|Avo|Neto|Tio|Tia|Sobrinho|Mae|Primo|Prima])s?\b\s*[^.\d\(\)]*).")
     for d in parsed:
         if d['Observacoes']:
             relacoes = pattern.findall(d['Observacoes'])
@@ -163,7 +163,7 @@ def tabelaNomes(dic):
         print(f"{str(k).ljust(col1)} {v[0].ljust(col2)} {v[1].ljust(col3)} {v[2].ljust(col4)} {v[3].ljust(col5)} {v[4].ljust(col6)}")
 
 def main():
-    file = processarFile()
+    file = parsing()
     while True:
         print("Selecione uma opção:")
         print("1 - Frequência de processos por ano ")
@@ -181,7 +181,7 @@ def main():
             break
         elif opcao == "2":
             #Frequência de nomes próprios nos séculos
-            alineaB = processaNomes(file)
+            alineaB = nomes_freq(file)
             tabelaNomes(alineaB)
             break
         elif opcao == "3":
